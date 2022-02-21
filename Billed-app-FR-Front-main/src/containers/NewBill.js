@@ -9,6 +9,7 @@ export default class NewBill {
     const formNewBill = this.document.querySelector(
       `form[data-testid="form-new-bill"]`
     );
+    
     formNewBill.addEventListener("submit", this.handleSubmit);
     const file = this.document.querySelector(`input[data-testid="file"]`);
     file.addEventListener("change", this.handleChangeFile);
@@ -21,6 +22,7 @@ export default class NewBill {
     e.preventDefault();
     const file = this.document.querySelector(`input[data-testid="file"]`)
       .files[0];
+    console.log(file);
     const filePath = e.target.value.split(/\\/g);
     const fileName = filePath[filePath.length - 1];
     const formData = new FormData();
@@ -48,6 +50,9 @@ export default class NewBill {
         .catch((error) => console.error(error));
     } else {
       console.log("format incorrect"); //rajouter une erreur au niveau du HTML
+      this.document.querySelector(`input[data-testid="file"]`).files = null;
+      this.document.querySelector(`input[data-testid="file"]`).value = "";
+      
     }
   };
   handleSubmit = (e) => {

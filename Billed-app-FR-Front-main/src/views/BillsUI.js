@@ -19,27 +19,20 @@ const row = (bill) => {
     `;
 };
 
-//I added antiChrono const and .sort() method to order list from earliest to latest
-const antiChrono = (a, b) => (a.date > b.date ? 1 : -1);
+//I added .sort() method to order list from earliest to latest
 
 const rows = (data) => {
   return data && data.length
     ? data
-        .sort(antiChrono)
+        .sort((a, b) => (a.date < b.date ? 1 : -1))
         .map((bill) => row(bill))
         .join("")
     : "";
 };
 
-//mes modifs
-
-// console.log(bills);
-// const antiChrono = (a, b) => (a.date > b.date ? 1 : -1);
-// bills.sort(antiChrono);
-
 export default ({ data: bills, loading, error }) => {
   const modal = () => `
-    <div class="modal fade" id="modaleFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="modaleFile" data-testid="modaleFileEmployee" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
