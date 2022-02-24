@@ -22,7 +22,7 @@ export default class NewBill {
     e.preventDefault();
     const file = this.document.querySelector(`input[data-testid="file"]`)
       .files[0];
-    console.log(file);
+
     const filePath = e.target.value.split(/\\/g);
     const fileName = filePath[filePath.length - 1];
     const formData = new FormData();
@@ -30,6 +30,7 @@ export default class NewBill {
     formData.append("file", file);
     formData.append("email", email);
 
+    console.log(file.type)
     if (file.type === "image/png" || file.type === "image/jpeg") {
       console.log("format correct");
 
@@ -49,7 +50,7 @@ export default class NewBill {
         })
         .catch((error) => console.error(error));
     } else {
-      console.log("format incorrect"); //rajouter une erreur au niveau du HTML
+      alert("format incorrect"); 
       this.document.querySelector(`input[data-testid="file"]`).files = null;
       this.document.querySelector(`input[data-testid="file"]`).value = "";
       

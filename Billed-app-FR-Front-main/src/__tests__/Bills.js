@@ -49,9 +49,6 @@ describe("Given I am connected as an employee", () => {
       expect(dates).toEqual(datesSorted);
     });
   });
-  // describe("When I click on new bill", () => {
-  //   test("the new Bill modal should open", () => {});
-  // });
 });
 
 //AL add tests:
@@ -78,16 +75,84 @@ describe("Given I am connected as Employee and I am on Bills page", () => {
         store,
         localStorage: window.localStorage,
       });
-
-      const handleClickIconEye = jest.fn(bills1.handleClickIconEye);
+      $.fn.modal = jest.fn();
       const eye = screen.getByTestId("icon-eye");
+
+      const handleClickIconEye = jest.fn(bills1.handleClickIconEye(eye));
       eye.addEventListener("click", handleClickIconEye);
+
       userEvent.click(eye);
 
       expect(handleClickIconEye).toHaveBeenCalled();
+
       //code trouvé sur openWorkplace pour résoudre pb=> $.fn.modal = jest.fn();
+
       const modale = screen.getByTestId("modaleFileEmployee");
       expect(modale).toBeTruthy();
+    });
+  });
+});
+
+describe("Given I am a user connected as Employee", () => {
+  describe("When I navigate to Bill page", () => {
+    test("fetches bills from mock API GET", async () => {
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ type: "Employee", email: "a@a" })
+      );
+      const root = document.createElement("div");
+      root.setAttribute("id", "root");
+      document.body.append(root);
+      router();
+      window.onNavigate(ROUTES_PATH.Bills);
+      expect(screen.getByTestId("btn-new-bill")).toBeTruthy();
+    });
+    describe("When an error occurs on API", () => {
+      beforeEach(() => {
+        jest.spyOn(mockStore, "bills");
+        Object.defineProperty(window, "localStorage", {
+          value: localStorageMock,
+        });
+        window.localStorage.setItem(
+          "user",
+          JSON.stringify({
+            type: "Employee",
+            email: "a@a",
+          })
+        );
+        const root = document.createElement("div");
+        root.setAttribute("id", "root");
+        document.body.appendChild(root);
+        router();
+      });
+      test("fetches bills from an API and fails with 404 message error", async () => {
+        mockStore.bills.mockImplementationOnce(() => {
+          return {
+            list: () => {
+              return Promise.reject(new Error("Erreur 404"));
+            },
+          };
+        });
+        window.onNavigate(ROUTES_PATH.Bills);
+        await new Promise(process.nextTick);
+        const message = await screen.getByText(/Erreur 404/);
+        expect(message).toBeTruthy();
+      });
+
+      test("fetches messages from an API and fails with 500 message error", async () => {
+        mockStore.bills.mockImplementationOnce(() => {
+          return {
+            list: () => {
+              return Promise.reject(new Error("Erreur 500"));
+            },
+          };
+        });
+
+        window.onNavigate(ROUTES_PATH.Bills);
+        await new Promise(process.nextTick);
+        const message = await screen.getByText(/Erreur 500/);
+        expect(message).toBeTruthy();
+      });
     });
   });
 });
