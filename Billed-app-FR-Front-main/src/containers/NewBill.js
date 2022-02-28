@@ -9,7 +9,7 @@ export default class NewBill {
     const formNewBill = this.document.querySelector(
       `form[data-testid="form-new-bill"]`
     );
-    
+
     formNewBill.addEventListener("submit", this.handleSubmit);
     const file = this.document.querySelector(`input[data-testid="file"]`);
     file.addEventListener("change", this.handleChangeFile);
@@ -25,36 +25,37 @@ export default class NewBill {
 
     const filePath = e.target.value.split(/\\/g);
     const fileName = filePath[filePath.length - 1];
-    const formData = new FormData();
-    const email = JSON.parse(localStorage.getItem("user")).email;
-    formData.append("file", file);
-    formData.append("email", email);
 
-    console.log(file.type)
-    if (file.type === "image/png" || file.type === "image/jpeg") {
-      console.log("format correct");
+     if (file.type === "image/png" || file.type === "image/jpeg") {
+       console.log("format correct");
 
-      this.store
-        .bills()
-        .create({
-          data: formData,
-          headers: {
-            noContentType: true,
-          },
-        })
-        .then(({ fileUrl, key }) => {
-          console.log(fileUrl);
-          this.billId = key;
-          this.fileUrl = fileUrl;
-          this.fileName = fileName;
-        })
-        .catch((error) => console.error(error));
-    } else {
-      alert("format incorrect"); 
-      this.document.querySelector(`input[data-testid="file"]`).files = null;
-      this.document.querySelector(`input[data-testid="file"]`).value = "";
-      
-    }
+       const formData = new FormData();
+       const email = JSON.parse(localStorage.getItem("user")).email;
+       formData.append("file", file);
+       formData.append("email", email);
+
+       console.log(file.type);
+
+       this.store
+         .bills()
+         .create({
+           data: formData,
+           headers: {
+             noContentType: true,
+           },
+         })
+         .then(({ fileUrl, key }) => {
+           console.log(fileUrl);
+           this.billId = key;
+           this.fileUrl = fileUrl;
+           this.fileName = fileName;
+         })
+         .catch((error) => console.error(error));
+     } else {
+       alert("format incorrect");
+       this.document.querySelector(`input[data-testid="file"]`).files = null;
+       this.document.querySelector(`input[data-testid="file"]`).value = "";
+     }
   };
   handleSubmit = (e) => {
     e.preventDefault();
@@ -86,6 +87,7 @@ export default class NewBill {
   };
 
   // not need to cover this function by tests
+  /* istanbul ignore next */
   updateBill = (bill) => {
     if (this.store) {
       this.store
