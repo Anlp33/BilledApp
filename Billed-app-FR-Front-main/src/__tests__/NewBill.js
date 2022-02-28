@@ -9,6 +9,7 @@ import { ROUTES, ROUTES_PATH } from "../constants/routes.js";
 import { localStorageMock } from "../__mocks__/localStorage.js";
 import mockStore from "../__mocks__/store";
 import router from "../app/Router.js";
+
 // import userEvent from "@testing-library/user-event";
 
 // //AL added mock
@@ -83,21 +84,9 @@ describe("Given I am connected as an employee", () => {
       expect(screen.getAllByText("Envoyer une note de frais")).toBeTruthy();
     });
   });
-  // });
-  // describe("Given I am connected as an employee and I am on NewBill Page", () => {
-});
 
-// fireEvent.change(inputFile, {
-//   target: {
-//     files: [
-//       new File(["myFile.txt"], "myFile.txt", { type: "text/plain" }),
-//     ],
-//   },
-// });
-
-describe("Given I am a user connected as Employee", () => {
   describe("When I navigate to Bill page", () => {
-    test("fetches New Bills from mock API POST", async () => {
+    test("fetches New Bills from mock API", async () => {
       beforeEach(() => {
         jest.spyOn(mockStore, "bills");
         Object.defineProperty(window, "localStorage", {
@@ -163,40 +152,46 @@ describe("Given I am a user connected as Employee", () => {
 });
 
 describe("when I click on the submit button", () => {
-  test("the bill should be sent", () => {
-    jest.spyOn(mockStore, "bills");
-    Object.defineProperty(window, "localStorage", { value: localStorageMock });
-    window.localStorage.setItem(
-      "user",
-      JSON.stringify({
-        type: "Employee",
-        email: "a@a",
-      })
-    );
-    const expenseType = screen.getByTestId("expense-type");
-    expenseType.value = "Transports";
+  test("the bill should be sent", async () => {
+    beforeEach(() => {
+      jest.spyOn(mockStore, post);
 
-    const expenseName = screen.getByTestId("expense-name");
-    expenseName.value = "test1";
+      const expenseType = screen.getByTestId("expense-type");
+      expect(expenseType).toBe("Hôtel et logement");
 
-    const expenseAmount = screen.getByTestId("amount");
-    expenseAmount.value = 100;
+      const form = screen.getByTestId("form-new-bill");
+      fireEvent.submit(form);
 
-    const expenseDate = screen.getByTestId("datepicker");
-    expenseDate.value = "2001-01-01";
+      expect(form).toBeTruthy();
+    });
 
-    const expenseVAT = screen.getByTestId("vat");
-    expenseVAT.value = "";
+    // Object.defineProperty(window, "localStorage", { value: localStorageMock });
+    // window.localStorage.setItem(
+    //   "user",
+    //   JSON.stringify({
+    //     type: "Employee",
+    //     email: "a@a",
+    //   })
+    // );
+    // const expenseType = screen.getByTestId("expense-type");
+    // expenseType.value = "Transports";
 
-    const expensePCT = screen.getByTestId("pct");
-    expensePCT.value = 20;
+    // const expenseName = screen.getByTestId("expense-name");
+    // expenseName.value = "test1";
 
-    const expenseCommentary = screen.getByTestId("commentary");
-    expenseCommentary.value = "plop";
+    // const expenseAmount = screen.getByTestId("amount");
+    // expenseAmount.value = 100;
 
-    const form = screen.getByTestId("form-new-bill");
-    fireEvent.submit(form);
+    // const expenseDate = screen.getByTestId("datepicker");
+    // expenseDate.value = "2001-01-01";
 
-    expect(form).toBeTruthy();
+    // const expenseVAT = screen.getByTestId("vat");
+    // expenseVAT.value = "";
+
+    // const expensePCT = screen.getByTestId("pct");
+    // expensePCT.value = 20;
+
+    // const expenseCommentary = screen.getByTestId("commentary");
+    // expenseCommentary.value = "plop";
   });
 });
