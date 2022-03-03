@@ -182,40 +182,51 @@ describe("Given I am a user connected as Employee", () => {
 });
 
 describe("when I click on the submit button", () => {
-  test("the bill should be sent", () => {
-    jest.spyOn(mockStore, "bills");
-    Object.defineProperty(window, "localStorage", { value: localStorageMock });
-    window.localStorage.setItem(
-      "user",
-      JSON.stringify({
-        type: "Employee",
-        email: "a@a",
-      })
-    );
-    const expenseType = screen.getByTestId("expense-type");
-    expenseType.value = "Transports";
+  test("the bill should be sent", async() => {
+    beforeEach(() => {
+      jest.spyOn(mockStore, post);
 
-    const expenseName = screen.getByTestId("expense-name");
-    expenseName.value = "test1";
+      const expenseType = screen.getByTestId("expense-type");
+      expect(expenseType).toBe("Hôtel et logement");
 
-    const expenseAmount = screen.getByTestId("amount");
-    expenseAmount.value = 100;
+      const form = screen.getByTestId("form-new-bill");
+      fireEvent.submit(form);
 
-    const expenseDate = screen.getByTestId("datepicker");
-    expenseDate.value = "2001-01-01";
+      expect(form).toBeTruthy();
 
-    const expenseVAT = screen.getByTestId("vat");
-    expenseVAT.value = "";
+      // jest.spyOn(mockStore, "bills");
+      // Object.defineProperty(window, "localStorage", { value: localStorageMock });
+      // window.localStorage.setItem(
+      //   "user",
+      //   JSON.stringify({
+      //     type: "Employee",
+      //     email: "a@a",
+      //   })
+      // );
+      // const expenseType = screen.getByTestId("expense-type");
+      // expenseType.value = "Transports";
 
-    const expensePCT = screen.getByTestId("pct");
-    expensePCT.value = 20;
+      // const expenseName = screen.getByTestId("expense-name");
+      // expenseName.value = "test1";
 
-    const expenseCommentary = screen.getByTestId("commentary");
-    expenseCommentary.value = "plop";
+      // const expenseAmount = screen.getByTestId("amount");
+      // expenseAmount.value = 100;
 
-    const form = screen.getByTestId("form-new-bill");
-    fireEvent.submit(form);
+      // const expenseDate = screen.getByTestId("datepicker");
+      // expenseDate.value = "2001-01-01";
 
-    expect(form).toBeTruthy();
-  });
+      // const expenseVAT = screen.getByTestId("vat");
+      // expenseVAT.value = "";
+
+      // const expensePCT = screen.getByTestId("pct");
+      // expensePCT.value = 20;
+
+      // const expenseCommentary = screen.getByTestId("commentary");
+      // expenseCommentary.value = "plop";
+
+      // const form = screen.getByTestId("form-new-bill");
+      // fireEvent.submit(form);
+
+      // expect(form).toBeTruthy();
+    })});
 });
