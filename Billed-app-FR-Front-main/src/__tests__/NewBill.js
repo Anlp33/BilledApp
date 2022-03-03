@@ -10,40 +10,17 @@ import { localStorageMock } from "../__mocks__/localStorage.js";
 import mockStore from "../__mocks__/store";
 import router from "../app/Router.js";
 
-// import userEvent from "@testing-library/user-event";
-
 // //AL added mock
 jest.mock("../app/store", () => mockStore);
 window.alert = jest.fn();
 
 describe("Given I am connected as an employee", () => {
-  describe("When I click on the button 'choisir un fichier' and I upload a file in the correct format", () => {
-    test("it should add the file to the form", () => {
-      window.localStorage.setItem("user", JSON.stringify({ type: "Employee" }));
-      const onNavigate = (pathname) => {
-        document.body.innerHTML = ROUTES({ pathname });
-      };
-
+  describe("When I am on NewBill Page", () => {
+    test("The page should contain 'Envoyer une note de frais'", () => {
       const html = NewBillUI();
       document.body.innerHTML = html;
-      const newBills = new NewBill({
-        document,
-        onNavigate,
-        localStorage: window.localStorage,
-      });
-
-      const handleChangeFile = jest.fn((e) => newBills.handleChangeFile);
-      const fileInput = screen.getByTestId("file");
-
-      fileInput.addEventListener("change", handleChangeFile);
-      fireEvent.change(fileInput, {
-        target: {
-          files: [new File(["proof.jpg"], "proof.jpg", { type: "proof/jpg" })],
-        },
-      });
-
-      expect(handleChangeFile).toHaveBeenCalled();
-      expect(fileInput.files[0].name).toBe("proof.jpg");
+      //to-do write assertion
+      expect(screen.getAllByText("Envoyer une note de frais")).toBeTruthy();
     });
   });
 
@@ -76,17 +53,70 @@ describe("Given I am connected as an employee", () => {
     });
   });
 
-  describe("When I am on NewBill Page", () => {
-    test("The page should contain 'Envoyer une note de frais'", () => {
+  describe("When I click on the button 'choisir un fichier' and I upload a file in the correct format", () => {
+    test("it should add the file to the form", () => {
+      window.localStorage.setItem("user", JSON.stringify({ type: "Employee" }));
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname });
+      };
+
       const html = NewBillUI();
       document.body.innerHTML = html;
-      //to-do write assertion
-      expect(screen.getAllByText("Envoyer une note de frais")).toBeTruthy();
+      const newBills = new NewBill({
+        document,
+        onNavigate,
+        localStorage: window.localStorage,
+      });
+
+      const handleChangeFile = jest.fn((e) => newBills.handleChangeFile);
+      const fileInput = screen.getByTestId("file");
+
+      fileInput.addEventListener("change", handleChangeFile);
+      fireEvent.change(fileInput, {
+        target: {
+          files: [new File(["proof.jpg"], "proof.jpg", { type: "proof/jpg" })],
+        },
+      });
+
+      expect(handleChangeFile).toHaveBeenCalled();
+      expect(fileInput.files[0].name).toBe("proof.jpg");
     });
   });
+});
 
+describe("When I add an image file as bill proof", () => {
+  test("Then this new file should have been changed in the input", () => {
+    window.localStorage.setItem("user", JSON.stringify({ type: "Employee" }));
+    const onNavigate = (pathname) => {
+      document.body.innerHTML = ROUTES({ pathname });
+    };
+
+    const html = NewBillUI();
+    document.body.innerHTML = html;
+    const newBills = new NewBill({
+      document,
+      onNavigate,
+      localStorage: window.localStorage,
+    });
+
+    const handleChangeFile = jest.fn((e) => newBills.handleChangeFile);
+    const fileInput = screen.getByTestId("file");
+
+    fileInput.addEventListener("change", handleChangeFile);
+    fireEvent.change(fileInput, {
+      target: {
+        files: [new File(["proof.jpg"], "proof.jpg", { type: "proof/jpg" })],
+      },
+    });
+
+    expect(handleChangeFile).toHaveBeenCalled();
+    expect(fileInput.files[0].name).toBe("proof.jpg");
+  });
+});
+
+describe("Given I am a user connected as Employee", () => {
   describe("When I navigate to Bill page", () => {
-    test("fetches New Bills from mock API", async () => {
+    test("fetches New Bills from mock API POST", async () => {
       beforeEach(() => {
         jest.spyOn(mockStore, "bills");
         Object.defineProperty(window, "localStorage", {
@@ -152,46 +182,40 @@ describe("Given I am connected as an employee", () => {
 });
 
 describe("when I click on the submit button", () => {
-  test("the bill should be sent", async () => {
-    beforeEach(() => {
-      jest.spyOn(mockStore, post);
+  test("the bill should be sent", () => {
+    jest.spyOn(mockStore, "bills");
+    Object.defineProperty(window, "localStorage", { value: localStorageMock });
+    window.localStorage.setItem(
+      "user",
+      JSON.stringify({
+        type: "Employee",
+        email: "a@a",
+      })
+    );
+    const expenseType = screen.getByTestId("expense-type");
+    expenseType.value = "Transports";
 
-      const expenseType = screen.getByTestId("expense-type");
-      expect(expenseType).toBe("Hôtel et logement");
+    const expenseName = screen.getByTestId("expense-name");
+    expenseName.value = "test1";
 
-      const form = screen.getByTestId("form-new-bill");
-      fireEvent.submit(form);
+    const expenseAmount = screen.getByTestId("amount");
+    expenseAmount.value = 100;
 
-      expect(form).toBeTruthy();
-    });
+    const expenseDate = screen.getByTestId("datepicker");
+    expenseDate.value = "2001-01-01";
 
-    // Object.defineProperty(window, "localStorage", { value: localStorageMock });
-    // window.localStorage.setItem(
-    //   "user",
-    //   JSON.stringify({
-    //     type: "Employee",
-    //     email: "a@a",
-    //   })
-    // );
-    // const expenseType = screen.getByTestId("expense-type");
-    // expenseType.value = "Transports";
+    const expenseVAT = screen.getByTestId("vat");
+    expenseVAT.value = "";
 
-    // const expenseName = screen.getByTestId("expense-name");
-    // expenseName.value = "test1";
+    const expensePCT = screen.getByTestId("pct");
+    expensePCT.value = 20;
 
-    // const expenseAmount = screen.getByTestId("amount");
-    // expenseAmount.value = 100;
+    const expenseCommentary = screen.getByTestId("commentary");
+    expenseCommentary.value = "plop";
 
-    // const expenseDate = screen.getByTestId("datepicker");
-    // expenseDate.value = "2001-01-01";
+    const form = screen.getByTestId("form-new-bill");
+    fireEvent.submit(form);
 
-    // const expenseVAT = screen.getByTestId("vat");
-    // expenseVAT.value = "";
-
-    // const expensePCT = screen.getByTestId("pct");
-    // expensePCT.value = 20;
-
-    // const expenseCommentary = screen.getByTestId("commentary");
-    // expenseCommentary.value = "plop";
+    expect(form).toBeTruthy();
   });
 });

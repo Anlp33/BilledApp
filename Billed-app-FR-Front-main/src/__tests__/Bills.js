@@ -43,7 +43,6 @@ describe("Given I am connected as an employee", () => {
           /^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/i
         )
         .map((a) => a.innerHTML);
-      //change from (a<b) to (a>b) to order list from earliest to latest
       const antiChrono = (a, b) => (a < b ? 1 : -1);
       const datesSorted = [...dates].sort(antiChrono);
       expect(dates).toEqual(datesSorted);
@@ -84,9 +83,7 @@ describe("Given I am connected as Employee and I am on Bills page", () => {
       userEvent.click(eye);
 
       expect(handleClickIconEye).toHaveBeenCalled();
-
-      //code trouvé sur openWorkplace pour résoudre pb=> $.fn.modal = jest.fn();
-
+      
       const modale = screen.getByTestId("modaleFileEmployee");
       expect(modale).toBeTruthy();
     });
