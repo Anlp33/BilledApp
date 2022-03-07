@@ -95,6 +95,7 @@ export default class {
   };
 
   handleEditTicket(e, bill, bills) {
+    //AL added a stopEventPropagation
     e.stopImmediatePropagation();
     if (this.counter === undefined || this.id !== bill.id) this.counter = 0;
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id;
@@ -141,6 +142,7 @@ export default class {
   };
 
   handleShowTickets(e, bills, index) {
+    //AL added a stopEventPropagation
     e.stopImmediatePropagation();
     if (this.counter === undefined || this.index !== index) this.counter = 0;
     if (this.index === undefined || this.index !== index) this.index = index;
@@ -154,7 +156,6 @@ export default class {
     } else {
       $(`#arrow-icon${this.index}`).css({ transform: "rotate(90deg)" });
       $(`#status-bills-container${this.index}`).html("");
-      //Modif AL: I removed this to stop the counter to always get this.counter % 2 === 0
       this.counter++;
       console.log("else" + this.counter);
     }
