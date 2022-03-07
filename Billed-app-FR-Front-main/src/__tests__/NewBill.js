@@ -85,7 +85,7 @@ describe("Given I am connected as an employee", () => {
 });
 
 describe("When I add an image file as bill proof", () => {
-  test("Then this new file should have been changed in the input", () => {
+  test("Then this new file should change in the input", () => {
     window.localStorage.setItem("user", JSON.stringify({ type: "Employee" }));
     const onNavigate = (pathname) => {
       document.body.innerHTML = ROUTES({ pathname });
@@ -116,7 +116,7 @@ describe("When I add an image file as bill proof", () => {
 
 describe("Given I am a user connected as Employee", () => {
   describe("When I navigate to Bill page", () => {
-    test("fetches New Bills from mock API POST", async () => {
+    test("fetches New Bills from mock API", async () => {
       beforeEach(() => {
         jest.spyOn(mockStore, "bills");
         Object.defineProperty(window, "localStorage", {
@@ -192,6 +192,7 @@ describe("when I click on the submit button", () => {
         email: "a@a",
       })
     );
+
     const expenseType = screen.getByTestId("expense-type");
     expenseType.value = "Transports";
 
@@ -217,5 +218,32 @@ describe("when I click on the submit button", () => {
     fireEvent.submit(form);
 
     expect(form).toBeTruthy();
+  });
+});
+
+describe("I am connected as an employee and on Bill page", () => {
+  test("fetches new Bills from mock API POST", async () => {
+    const newBill = {
+      id: "47qAXb6fIm2zOKkLzMro",
+      vat: "80",
+      fileUrl:
+        "https://test.storage.tld/v0/b/billable-677b6.a…f-1.jpg?alt=media&token=c1640e12-a24b-4b11-ae52-529112e9602a",
+      status: "pending",
+      type: "Hôtel et logement",
+      commentary: "séminaire billed",
+      name: "encore",
+      fileName: "preview-facture-free-201801-pdf-1.jpg",
+      date: "2004-04-04",
+      amount: 400,
+      commentAdmin: "ok",
+      email: "a@a",
+      pct: 20,
+    };
+
+    const getSpy = jest.spyOn(mockStore, "post"); //"mockstore" à la place de "store"?
+
+    await mockStore.post(newBill);
+    expect(getSpy).toHaveBeenCalledTimes(1);
+    expect(getSpy).toHaveBeenLastCalledWith(newBill);
   });
 });
