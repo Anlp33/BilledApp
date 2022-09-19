@@ -1,11 +1,8 @@
 
-## L'architecture du projet :
-Ce projet, dit frontend, est connecté à un service API backend que vous devez aussi lancer en local.
+## Project Architecture :
+This project "Front-End" is connected to an API backend service that you will need to launch locally.
 
-Le projet backend se trouve ici: https://github.com/OpenClassrooms-Student-Center/Billed-app-FR-back
-
-## Organiser son espace de travail :
-Pour une bonne organization, vous pouvez créer un dossier bill-app dans lequel vous allez cloner le projet backend et par la suite, le projet frontend:
+You will find the backend project here: https://github.com/OpenClassrooms-Student-Center/Billed-app-FR-back
 
 Clonez le projet backend dans le dossier bill-app :
 ```
@@ -28,67 +25,46 @@ bill-app/
    - Billed-app-FR-Front
 ```
 
-## Comment lancer l'application en local ?
+## How to launch the app locally?
 
-### étape 1 - Lancer le backend :
+### Step 1 - Launch backend :
 
-Suivez les indications dans le README du projet backend.
+Clone the backend:
+$ git clone https://github.com/OpenClassrooms-Student-Center/Billed-app-FR-Back.git
 
-### étape 2 - Lancer le frontend :
+### Step 2 - Launch frontend :
 
-Allez au repo cloné :
-```
-$ cd Billed-app-FR-Front
-```
+Clone frontend:
+$ git clone https://github.com/OpenClassrooms-Student-Center/Billed-app-FR-Front.git
 
-Installez les packages npm (décrits dans `package.json`) :
+Install packages:
 ```
 $ npm install
 ```
 
-Installez live-server pour lancer un serveur local :
+Install live-server to launch it locally :
 ```
 $ npm install -g live-server
 ```
 
-Lancez l'application :
+Launch the app:
 ```
 $ live-server
 ```
 
-Puis allez à l'adresse : `http://127.0.0.1:8080/`
+Go to this address : `http://127.0.0.1:8080/`
 
+## Accounts and users:
 
-## Comment lancer tous les tests en local avec Jest ?
+You can loggin by using these accounts:
 
+### administrator : 
 ```
-$ npm run test
+user : admin@test.tld 
+password : admin
 ```
-
-## Comment lancer un seul test ?
-
-Installez jest-cli :
-
+### employee :
 ```
-$npm i -g jest-cli
-$jest src/__tests__/your_test_file.js
-```
-
-## Comment voir la couverture de test ?
-
-`http://127.0.0.1:8080/coverage/lcov-report/`
-
-## Comptes et utilisateurs :
-
-Vous pouvez vous connecter en utilisant les comptes:
-
-### administrateur : 
-```
-utilisateur : admin@test.tld 
-mot de passe : admin
-```
-### employé :
-```
-utilisateur : employee@test.tld
-mot de passe : employee
+user : employee@test.tld
+password: employee
 ```
