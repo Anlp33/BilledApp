@@ -4,27 +4,6 @@ This project "Front-End" is connected to an API backend service that you will ne
 
 You will find the backend project here: https://github.com/OpenClassrooms-Student-Center/Billed-app-FR-back
 
-Clonez le projet backend dans le dossier bill-app :
-```
-$ git clone https://github.com/OpenClassrooms-Student-Center/Billed-app-FR-Back.git
-```
-
-```
-bill-app/
-   - Billed-app-FR-Back
-```
-
-Clonez le projet frontend dans le dossier bill-app :
-```
-$ git clone https://github.com/OpenClassrooms-Student-Center/Billed-app-FR-Front.git
-```
-
-```
-bill-app/
-   - Billed-app-FR-Back
-   - Billed-app-FR-Front
-```
-
 ## How to launch the app locally?
 
 ### Step 1 - Launch backend :
